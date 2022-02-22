@@ -1,0 +1,322 @@
+#Блок объявления перменных
+print("Вашему вниманию представлены крестики - нолики\n")
+print("PCAGRO: \"Ты смел, если решишься играть со мной! Уверен ли ты, что у тебя есть шансы против вычислительной машины?\" ")
+import random as r
+import time as t
+import os as o
+a = []
+lose = 1
+l = 0
+str2 = ("1, чтобы играть еще раз", "0, чтобы выйти")
+str = ("Поразительно! Тебе удалось выиграть меня! Ты действительно умен!", "Твое поражение закономерно! Куда тебе, человек, тягаться с моими вычислительными способностями!", "Ты почти смог! Ну ничего, в следующий раз повезет!", "Ты слаб, раз признаешь свое поражение!")
+n = 3 #размер поля
+
+# Список для прверки на выигрыш
+cwin = [0 for k in range(16)]
+input("Если все же решился играть - нажимай enter")
+print("Загрузка поля: ")
+
+#Загрузка поля в %
+for tl in range(11):
+    rand = r.random()
+    print("/{}%/".format(tl * 10))
+    t.sleep(rand)
+print()
+print("Игровое поле загружено:")
+
+# задание и вывод матрицы
+h = 9 * n - 4
+for f in range(h):
+    print("_", end="")
+print()
+for j in range(n):
+    b = []
+    for i in range(n):
+        b.append("-")
+    a.append(b)
+for i in range(n):
+    for j in range(n):
+        print("|", a[i][j], end=' |    ')
+    print(i + 1)
+    for f in range(h):
+        print("_", end="")
+    print()
+cc = []
+j = -1
+print()
+v = 0
+restart = ""
+while True:
+    j += 1
+    v += 1
+    cc.append(v)
+    if cc[j] < 10:
+        print(" ", cc[j], end='      ')
+    if cc[j] == 10:
+        print(" ", cc[j], end='     ')
+    if cc[j] > 10:
+        print(" ", cc[j], end='     ')
+    if j == n - 1:
+        break
+print("\n")
+
+# Инструкции для пользователя
+print("Для выбора клетки введите номер строки, затем номер столбца. Например: 1 1. Чтобы сдаться введите: 0 0.\n")
+t.sleep(1)
+#Задание списка имен
+P = ["", "PCAGRO"]
+
+#Определение очереди хода и символа, которым ходит игрок или компьютер
+while True:
+    if P[0] and P[1] != "":
+        break
+    elif P[0] == "":
+        P[0] = input("Введите ваше имя: ")
+simbl = ['x', '0']
+mot = r.randint(0, 1)
+simb = r.randint(0, 1)
+input("Нажмите enter для начала игры.")
+t.sleep(2)
+print("Первым ходит ", P[mot])
+t.sleep(1)
+if mot == 0:
+    print("Вам достались ", simbl[simb])
+else:
+    print("PCAGRO: \"Ну что ж, первый ход за мной! Удачи, {}!\"".format(P[0]))
+score = [0, 0]
+w = -1
+stop = 0
+
+
+#Начало игры
+while True:
+    #выбор клетки в случае хода компьютера
+    if mot == 1:
+        while True:
+            c = r.randrange(0, 3)
+            b = r.randrange(0, 3)
+            if a[c][b] == "-":
+                a[c][b] = simbl[simb]
+                t.sleep(1.5)
+                break
+    else:
+        #Выбор клетки в случае хода человека с проверкой на недопустимые значения
+        print(P[mot], end="")
+        print(", выбирайте клетку: ")
+        while True:
+            c, b = map(int, input().split())
+            if c == 0 and b == 0:
+                lose = 0
+                break
+            if (c <= 0) or (c > 3) or (b <= 0) or (b > 3):
+                while True:
+                    print("Недопустимое значение! Введите другое!")
+                    c, b = map(int, input().split())
+                    print()
+                    if (3 >= c >= 1) and (1 <= b <= 3):
+                        break
+            if a[c - 1][b - 1] == "-":
+                a[c - 1][b - 1] = simbl[simb]
+                print()
+                break
+            else:
+                print("Эта клетка занята, выберите другую!")
+
+    #Вывод поля заново
+    for f in range(h):
+        print("_", end="")
+    print()
+    for i in range(n):
+        for j in range(n):
+            print("|", a[i][j], end=' |    ')
+        print(i + 1)
+        for f in range(h):
+            print("_", end="")
+        print()
+    c = (1, 2, 3)
+    j = -1
+    print()
+    while True:
+        j += 1
+        print(" ", c[j], "     ", end="")
+        if j == 2:
+            break
+    print("\n")
+
+    #Проверка на ничью
+    for i in range(n):
+        for j in range(n):
+            if (a[i][j] == 'x') or (a[i][j] == '0'):
+                l += 1
+            else:
+                break
+
+    #Проверка на выигрыш
+    for i in range(n):
+        for j in range(n):
+            if i == j:
+                if a[i][j] == "x":
+                    cwin[0] += 1
+                elif a[i][j] == "0":
+                    cwin[1] += 1
+            if i == 0:
+                if a[i][j] == "x":
+                    cwin[2] += 1
+                elif a[i][j] == "0":
+                    cwin[3] += 1
+            if i == 1:
+                if a[i][j] == "x":
+                    cwin[4] += 1
+                elif a[i][j] == "0":
+                    cwin[5] += 1
+            if i == 2:
+                if a[i][j] == "x":
+                    cwin[6] += 1
+                elif a[i][j] == "0":
+                    cwin[7] += 1
+            if j == 0:
+                if a[i][j] == "x":
+                    cwin[8] += 1
+                elif a[i][j] == "0":
+                    cwin[9] += 1
+            if j == 1:
+                if a[i][j] == "x":
+                    cwin[10] += 1
+                elif a[i][j] == "0":
+                    cwin[11] += 1
+            if j == 2:
+                if a[i][j] == "x":
+                    cwin[12] += 1
+                elif a[i][j] == "0":
+                    cwin[13] += 1
+            if j == n - 1 - i:
+                if a[i][j] == "x":
+                    cwin[14] += 1
+                elif a[i][j] == "0":
+                    cwin[15] += 1
+        for w in range(16):
+            if cwin[w] == 3:
+                win = w
+                stop = 1
+                if ((win % 2 == 0) and (mot == 0) and (simb == 0)) or (
+                        (win % 2 != 0) and (mot == 0) and (simb == 1)):
+                    score[0] = 1
+                    break
+                if ((win % 2 == 0) and (mot == 1) and (simb == 0)) or (
+                        (win % 2 != 0) and (mot == 1) and (simb == 1)):
+                    score[1] = 1
+                    break
+        if stop == 1:
+            break
+    if simb == 0:
+        simb = 1
+    else:
+        simb = 0
+    if mot == 1:
+        mot = 0
+    else:
+        mot = 1
+    for c1 in range(16): #Очищение массива проверки
+        cwin[c1] = 0
+    if score[0] == 1:
+        print("Победил {}. Поздравляем! ".format(P[0]))
+        print("PCAGRO: \"{}\" ".format(str[0]))
+        l = 0
+    if score[1] == 1:
+        print("Победил {}. Поздравляем!".format(P[1]))
+        print("PCAGRO: \"{}\" ".format(str[1]))
+        l = 0
+    if l == 9:
+        print("Ничья! Победила дружба!")
+        print("PCAGRO: \"{}\" ".format(str[2]))
+    if lose == 0:
+        print(f"{P[0]} сдался.")
+        print(f"PCAGRO: \"{str[3]}\"")
+
+    #Предложение сыграть еще раз или выйти
+    if score[0] == 1 or score[1] == 1 or l == 9 or lose == 0:
+        print(f"Игра окончена. Вы можете выбрать одно из следующих действий:\n{str2[0]}\n{str2[1]}")
+        restart = int(input("Выберите действие: "))
+
+    #Начало игры заново
+    if restart == 1:
+        o.system("cls")
+        if lose == 0 or score[1] == 1:
+            print("\nPCAGRO: \"Не смог смириться с поражением, и куда тебя это привело?! Снова ко мне!\" ")
+        a = []
+        l = 0
+        n = 3
+        cwin = [0 for k in range(16)]
+        input("PCAGRO: \"Ну что ж, давай попробуем еще раз! Нажимай enter, чтобы начать.\"")
+        print("\nЗагрузка поля: ")
+        for tl in range(11):
+            rand = r.random()
+            print("/{}%/".format(tl * 10))
+            t.sleep(rand)
+        print()
+        print("Игровое поле загружено:")
+        h = 9 * n - 4
+        for f in range(h):
+            print("_", end="")
+        print()
+        for i in range(n):
+            b = []
+            for j in range(n):
+                b.append("-")
+            a.append(b)
+        for i in range(n):
+            for j in range(n):
+                print("|", a[i][j], end=' |    ')
+            print(i + 1)
+            for f in range(h):
+                print("_", end="")
+            print()
+        cc = []
+        j = -1
+        print()
+        v = 0
+        while True:
+            j += 1
+            v += 1
+            cc.append(v)
+            if cc[j] < 10:
+                print(" ", cc[j], end='      ')
+            if cc[j] == 10:
+                print(" ", cc[j], end='     ')
+            if cc[j] > 10:
+                print(" ", cc[j], end='     ')
+            if j == n - 1:
+                break
+        print("\n")
+        print("Для выбора клетки введите номер строки, затем номер столбца. Например: 1 1, чтобы сдаться введите: 0 0\n")
+        t.sleep(1)
+        P = ["", "PCAGRO"]
+        lose = 1
+        while True:
+            if P[0] and P[1] != "":
+                break
+            elif P[0] == "":
+                P[0] = input("Введите ваше имя: ")
+        simbl = ['x', '0']
+        mot = r.randint(0, 1)
+        simb = r.randint(0, 1)
+        input("Нажмите enter для начала игры.")
+        t.sleep(2)
+        print("Первым ходит ", P[mot])
+        t.sleep(1)
+        if mot == 0:
+            print("Вам достались ", simbl[simb])
+        else:
+            print("PCAGRO: \"Ну что ж, первый ход за мной! Удачи, {}!\"".format(P[0]))
+        score = [0, 0]
+        w = -1
+        stop = 0
+        restart = -1
+        continue
+    #Выход из программы
+    elif restart == 0:
+        restart = -1
+        break
+    l = 0
+    lose = 1
+input("\nНажмите enter, чтобы выйти")
